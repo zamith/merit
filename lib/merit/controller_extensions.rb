@@ -4,7 +4,11 @@ module Merit
   # 'controller_name#action_name'
   module ControllerExtensions
     def self.included(base)
+      p base
+      p base.class
+      p "Including"
       base.after_filter do |controller|
+        p "Controller stuff"
         return unless rules_defined?
 
         Merit::Action.create(
@@ -12,7 +16,7 @@ module Merit
           :action_method => action_name,
           :action_value  => params[:value],
           :had_errors    => had_errors?,
-          :target_model  => controller_name,
+          :target_model  => controller_path,
           :target_id     => target_id
         ).id
 
@@ -25,7 +29,7 @@ module Merit
     private
 
     def rules_defined?
-      action = "#{controller_name}\##{action_name}"
+      action = "#{controller_path}\##{action_name}"
       AppBadgeRules[action].present? || AppPointRules[action].present?
     end
 

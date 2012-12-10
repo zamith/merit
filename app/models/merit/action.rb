@@ -25,6 +25,7 @@ module Merit
     def check_all_rules
       processed!
       return if had_errors
+      p action_str
 
       badge_rules = ::Merit::AppBadgeRules[action_str] || []
       point_rules = ::Merit::AppPointRules[action_str] || []
@@ -60,6 +61,7 @@ module Merit
       else
         target = target(rule.to)
       end
+      p target
       target.try(:_sash)
     end
 
